@@ -48,32 +48,17 @@
         }
 </style>
 
-
-
 <div class="menu-container">
-    <div class="menu-item">
-        <img src="/images/menu/sushi.png" alt="Sushi" />
-        <h3>Sushi</h3>
-        <p>Цена: 500 руб.</p>
-    </div>
-    <div class="menu-item">
-        <img src="/images/menu/ramen.png" alt="Ramen" />
-        <h3>Ramen</h3>
-        <p>Цена: 450 руб.</p>
-    </div>
-    <div class="menu-item">
-        <img src="/images/menu/tempura.png" alt="Tempura" />
-        <h3>Tempura</h3>
-        <p>Цена: 600 руб.</p>
-    </div>
-    <div class="menu-item">
-        <img src="/images/menu/takoyaki.png" alt="Takoyaki" />
-        <h3>Takoyaki</h3>
-        <p>Цена: 400 руб.</p>
-    </div>
-    <div class="menu-item">
-        <img src="/images/menu/miso-soup.png" alt="Miso Soup" />
-        <h3>Miso Soup</h3>
-        <p>Цена: 250 руб.</p>
-    </div>
+    @{
+        int index = 0; // Счетчик для индекса
+    }
+    @foreach (var item in Model.MenuItems)
+    {
+        <div class="menu-item">
+            <img src="/images/menu/@(index).png" alt="@item.Name" /> <!-- Используем наш индекс -->
+            <h3>@item.Name</h3>
+            <p>Цена: @item.Price руб.</p>
+        </div>
+        index++; // Увеличиваем индекс после каждой итерации
+    }
 </div>
