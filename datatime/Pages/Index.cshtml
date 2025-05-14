@@ -1,0 +1,17 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Добро пожаловать!</h1>
+<p>Текущее время: @DateTime.Now.ToString("HH:mm")</p>
+<p>Полная дата и время: @DateTime.Now.ToString("F")</p>
+<p>Номер текущего дня в году: @DateTime.Now.DayOfYear</p>
+<p>Текущий день недели: @DateTime.Now.DayOfWeek</p>
+@{
+    Random random = new Random();
+    int randomNumber = random.Next(1, 101); // случайное число от 1 до 100
+}
+
+<h2>Случайное число: @randomNumber</h2>
