@@ -1,0 +1,20 @@
+﻿@page
+@model TaskListModel
+@inject TaskManager.Services.ITaskService TaskService
+
+@{
+    ViewData["Title"] = "Список задач";
+    var tasks = TaskService.GetAllTasks();
+}
+
+<h1>Список задач</h1>
+<ul>
+    @foreach (var task in tasks)
+    {
+        <li>
+            <strong>@task.Title</strong><br />
+            @task.Description<br />
+            <small>Дата создания: @task.CreatedAt</small>
+        </li>
+    }
+</ul>
