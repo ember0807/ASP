@@ -1,42 +1,53 @@
 using ASP.lesson1.Pages;
+using Autofac; // Подключение пространства имен Autofac
+using Autofac.Extensions.DependencyInjection; // Подключение пространства имен для интеграции с ASP.NET Core
 
 namespace ASP.lesson1
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            // Создание builder для приложения
+            var builder = WebApplication.CreateBuilder(args);
 
-			// Регистрация служб
-			builder.Services.AddRazorPages();
-			builder.Services.AddScoped<RestaurantMenuService>(); // Регистрация сервиса
+            // Регистрация Autofac как DI контейнера
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-			var app = builder.Build();
+            // Регистрация служб ASP.NET Core
+            builder.Services.AddRazorPages();
 
-			// Настройка конвейера обработки HTTP запросов
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Error");
-				app.UseHsts();
-			}
+            // Создание контейнера Autofac
+            builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+            {
+                containerBuilder.RegisterType<RestaurantMenuService>().AsSelf().InstancePerLifetimeScope(); // Регистрация сервиса с Autofac
+            });
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            var app = builder.Build();
 
-			app.UseRouting();
+            // Настройка конвейера обработки HTTP запросов
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
-			app.UseAuthorization();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-			app.MapRazorPages();
+            app.UseRouting();
 
-			app.MapGet("/", context =>
-			{
-				context.Response.Redirect("/Home_pages"); // путь на случай отсутствия индекс файла
-				return Task.CompletedTask;
-			});
+            app.UseAuthorization();
 
-			app.Run();
-		}
-	}
+            app.MapRazorPages();
+
+            app.MapGet("/", context =>
+            {
+                context.Response.Redirect("/Home_pages"); // путь на случай отсутствия индекс файла
+                return Task.CompletedTask;
+            });
+
+            app.Run();
+        }
+    }
 }
