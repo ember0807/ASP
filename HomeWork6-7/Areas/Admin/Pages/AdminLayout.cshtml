@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Admin Area</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <a class="navbar-brand" asp-area="Admin" asp-page="/Index">Admin Panel</a>
+            </nav>
+        </header>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

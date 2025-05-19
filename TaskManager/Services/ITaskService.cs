@@ -5,6 +5,7 @@ namespace TaskManager.Services
 {
     public interface ITaskService
     {
+        //метод для получения всех задач
         IEnumerable<UserTask> GetAllTasks();
     }
 }

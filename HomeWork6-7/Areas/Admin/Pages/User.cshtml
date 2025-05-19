@@ -1,0 +1,24 @@
+﻿@page "{id:int}/{name?}"
+@model HomeWork6_7.Areas.Admin.Pages.UserModel
+
+<h1>User Page</h1>
+
+<!-- Ссылки на всех пользователей -->
+<h2>User List</h2>
+<ul>
+    <li><a asp-area="Admin" asp-page="/User/1/перс1">перс 1</a></li>
+    <li><a asp-area="Admin" asp-page="/User/2/перс2">перс 2</a></li>
+    <li><a asp-area="Admin" asp-page="/User/3/перс3">перс 3</a></li>
+    <li><a asp-area="Admin" asp-page="/User/4/перс3">Non-Existent User</a></li>
+</ul>
+
+<!-- Информация о текущем пользователе -->
+@if (Model.CurrentUser != null)
+{
+    <p>ID: @Model.CurrentUser.Id</p>
+    <p>Name: @Model.CurrentUser.Name</p>
+}
+else
+{
+    <p>User not found.</p>
+}
