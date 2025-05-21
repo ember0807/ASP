@@ -1,0 +1,23 @@
+﻿@page
+@using TaskManager.Services
+@model TaskManager.Pages.Tasks.NewTaskModel
+
+
+<h1>Создание новой задачи</h1>
+
+<form method="post">
+    <div>
+        <label for="Title">Заголовок</label>
+        <input type="text" name="Title" required />
+    </div>
+    <div>
+        <label for="Description">Описание</label>
+        <textarea name="Description" required></textarea>
+    </div>
+    <button type="submit">Добавить задачу</button>
+</form>
+
+@if (Model.Success)
+{
+    <p>Задача успешно добавлена!</p>
+}

@@ -1,0 +1,61 @@
+﻿@page
+@model TaskPlanner.Pages.IndexModel
+@{
+    ViewData["Title"] = "Список задач";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="CreateTask" class="btn btn-primary">Создать новую задачу</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+@if (Model.Tasks == null || !Model.Tasks.Any())
+{
+    <p>Задач пока нет. Создайте первую!</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Срок выполнения</th>
+                <th>Выполнено</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr class="@(task.IsCompleted ? "table-success text-decoration-line-through" : "")">
+                    <td>@task.Id</td>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.DueDate.ToShortDateString()</td>
+                    <td>@(task.IsCompleted ? "Да" : "Нет")</td>
+                    <td>
+                        @*  кнопки для редактирования/удаления/отметки выполнения *@
+                        
+                        <form method="post" asp-page-handler="ToggleComplete" asp-route-id="@task.Id" style="display:inline;">
+                            <button type="submit" class="btn btn-sm @(task.IsCompleted ? "btn-warning" : "btn-success")">
+                                @(task.IsCompleted ? "Отметить невыполненной" : "Отметить выполненной")
+                            </button>
+                        </form>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

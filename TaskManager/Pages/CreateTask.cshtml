@@ -1,0 +1,24 @@
+﻿@page
+@model CreateTaskModel
+@inject TaskManager.Services.ITaskService TaskService
+
+<h1>Создать новую задачу</h1>
+
+<form method="post">
+    <div>
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="Title" required />
+    </div>
+    <div>
+        <label for="description">Описание:</label>
+        <textarea id="description" name="Description" required></textarea>
+    </div>
+    <div>
+        <button type="submit">Создать задачу</button>
+    </div>
+</form>
+
+@if (Model.Success)
+{
+    <div>Задача создана успешно!</div>
+}

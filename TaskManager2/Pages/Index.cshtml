@@ -1,0 +1,51 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using TaskManager2.Models;
+using System.Linq;
+
+namespace TaskManager2.Pages
+{
+    public class IndexModel : PageModel
+    {
+        private static List<Task>
+	_tasks = new List<Task>
+		(); // Простой список для хранения задач в памяти
+		private static int _nextId = 1; // Для генерации уникальных ID
+
+		public IList<Task>
+			Tasks { get; set; }
+
+			[BindProperty]
+			public Task NewTask { get; set; }
+
+			public void OnGet()
+			{
+			Tasks = _tasks.OrderByDescending(t => t.CreationTime).ToList(); // Сортируем по времени создания
+			}
+
+			public IActionResult OnPost()
+			{
+			if (!ModelState.IsValid)
+			{
+			Tasks = _tasks.OrderByDescending(t => t.CreationTime).ToList();
+			return Page();
+			}
+
+			NewTask.Id = _nextId++;
+			_tasks.Add(NewTask);
+
+			return RedirectToPage(); // Перенаправляем на ту же страницу после добавления
+			}
+
+			public IActionResult OnPostDelete(int id)
+			{
+			var taskToDelete = _tasks.FirstOrDefault(t => t.Id == id);
+			if (taskToDelete != null)
+			{
+			_tasks.Remove(taskToDelete);
+			}
+			return RedirectToPage();
+			}
+			}
+			}
