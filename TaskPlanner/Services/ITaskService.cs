@@ -13,6 +13,7 @@ namespace TaskPlanner.Services
         Task<List<TaskItem>> GetAllTasksAsync();
         Task AddTaskAsync(TaskItem task);
         Task<TaskItem> GetTaskByIdAsync(int id); // Может понадобиться в будущем
-        // Можно добавить методы UpdateTaskAsync, DeleteTaskAsync и т.д.
+        Task UpdateTaskAsync(TaskItem task); // метод для обновления
+        Task DeleteTaskAsync(int id); // метод для удаления
     }
 }

@@ -17,7 +17,6 @@
     </div>
 }
 
-
 @if (Model.Tasks == null || !Model.Tasks.Any())
 {
     <p>Задач пока нет. Создайте первую!</p>
@@ -45,17 +44,47 @@ else
                     <td>@task.DueDate.ToShortDateString()</td>
                     <td>@(task.IsCompleted ? "Да" : "Нет")</td>
                     <td>
-                        @*  кнопки для редактирования/удаления/отметки выполнения *@
-                        
+                        <a asp-page="EditTask" asp-route-id="@task.Id" class="btn btn-sm btn-info me-2">Редактировать</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@task.Id" style="display:inline;" onsubmit="return confirm('Вы уверены, что хотите удалить эту задачу?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
                         <form method="post" asp-page-handler="ToggleComplete" asp-route-id="@task.Id" style="display:inline;">
-                            <button type="submit" class="btn btn-sm @(task.IsCompleted ? "btn-warning" : "btn-success")">
+                            <button type="submit" class="btn btn-sm @(task.IsCompleted ? "btn-warning" : "btn-success") ms-2">
                                 @(task.IsCompleted ? "Отметить невыполненной" : "Отметить выполненной")
                             </button>
                         </form>
-                        
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
+
+<hr />
+
+<h2>Импорт/Экспорт задач</h2>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h3>Экспорт задач</h3>
+        <p>Вы можете экспортировать все текущие задачи в JSON файл.</p>
+        <form method="get" asp-page-handler="Export">
+            <button type="submit" class="btn btn-secondary">Экспортировать в JSON</button>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Импорт задач</h3>
+        <p>Загрузите JSON файл с задачами, чтобы добавить их в текущий список.</p>
+        <form method="post" asp-page-handler="Import" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="file" name="uploadFile" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-secondary">Импортировать из JSON</button>
+            @if (!string.IsNullOrEmpty(Model.UploadErrorMessage))
+            {
+                <div class="text-danger mt-2">@Model.UploadErrorMessage</div>
+            }
+        </form>
+    </div>
+</div>
