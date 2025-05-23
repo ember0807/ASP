@@ -1,38 +1,50 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using TaskPlanner.Models;
-using TaskPlanner.Services;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc; // »мпортируем базовые классы дл€ управлени€ действи€ми MVC
+using Microsoft.AspNetCore.Mvc.RazorPages; // »мпортируем поддержку Razor Pages
+using TaskPlanner.Models; // »мпортируем модели задач
+using TaskPlanner.Services; // »мпортируем сервисы дл€ работы с задачами
+using System.Threading.Tasks; // »мпортируем пространство имен дл€ работы с задачами
 
 namespace TaskPlanner.Pages
 {
+    //  ласс CreateTaskModel представл€ет страницу дл€ создани€ новой задачи
     public class CreateTaskModel : PageModel
     {
+        // ѕоле дл€ хранени€ сервиса задач, которое будет использоватьс€ дл€ работы с задачами
         private readonly ITaskService _taskService;
 
+        // —войство дл€ прив€зки данных задачи из формы
         [BindProperty]
         public TaskItem NewTask { get; set; } = new TaskItem();
 
+        //  онструктор класса, который принимает сервис задач через Dependency Injection
         public CreateTaskModel(ITaskService taskService)
         {
-            _taskService = taskService;
+            _taskService = taskService; // —охран€ем ссылку на переданный сервис задач
         }
 
+        // ћетод, обрабатывающий HTTP GET-запросы дл€ этой страницы
         public void OnGet()
         {
-            // ћожно инициализировать NewTask здесь, если нужно
-            // NewTask.DueDate = DateTime.Today.AddDays(1);
+            // ћожно инициализировать NewTask здесь, если нужно (например, установить дату выполнени€)
+            // NewTask.DueDate = DateTime.Today.AddDays(1); // ѕример установки даты выполнени€ на завтра
         }
 
+        // јсинхронный метод, обрабатывающий HTTP POST-запросы при отправке формы
         public async Task<IActionResult> OnPostAsync()
         {
+            // ѕровер€ем, €вл€етс€ ли модель валидной (все об€зательные пол€ заполнены корректно)
             if (!ModelState.IsValid)
             {
-                return Page();
+                return Page(); // ≈сли модель не валидна, возвращаем ту же страницу дл€ исправлени€ ошибок
             }
 
+            // ƒобавл€ем новую задачу с помощью сервиса задач
             await _taskService.AddTaskAsync(NewTask);
+
+            // —охран€ем сообщение об успешном создании задачи в TempData дл€ отображени€ на следующей странице
             TempData["SuccessMessage"] = "«адача успешно создана!";
+
+            // ѕеренаправл€ем пользовател€ на страницу индекса (списка задач)
             return RedirectToPage("./Index");
         }
     }
