@@ -125,17 +125,34 @@ namespace TaskPlanner.Services
 
                 if (importedTasks != null)
                 {
-                    // Сохраняем задачи в текущий список с новыми уникальными ID
-                    foreach (var task in importedTasks)
+                    foreach (var importedTask in importedTasks)
                     {
-                        task.Id = _nextId++; // Присваиваем новые ID во избежание конфликтов
-                        _tasks.Add(task);
+                        // Проверяем, существует ли задача с таким же ID
+                        var existingTask = _tasks.FirstOrDefault(t => t.Id == importedTask.Id);
+
+                        if (existingTask == null)
+                        {
+                            // Если дубликата нет, добавляем его с текущим ID
+                            _tasks.Add(importedTask);
+                        }
+                        else
+                        {
+                            // Задача уже существует, можно обновить или записать сообщение
+                            Console.WriteLine($"Обновление существующей задачи с ID: {importedTask.Id}");
+
+                            // Обновляем существующую задачу с новыми данными
+                            existingTask.Title = importedTask.Title;
+                            existingTask.Description = importedTask.Description;
+                            existingTask.DueDate = importedTask.DueDate;
+                            existingTask.IsCompleted = importedTask.IsCompleted;
+                        }
                     }
                     // Сохраняем обновленный список задач в файл
                     SaveTasksToFile();
                 }
             }
         }
+
 
         // Асинхронный метод для экспорта задач в JSON строку
         public async Task<string> ExportTasksToJsonAsync()
