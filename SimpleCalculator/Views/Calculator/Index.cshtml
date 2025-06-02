@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    // Устанавливаем заголовок страницы
+    ViewData["Title"] = "Калькулятор";
+}
+
+<h1>Калькулятор</h1>
+
+@* Отображаем сообщение об ошибке, если оно есть *@
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+@* Форма для ввода данных и отправки на сервер *@
+<form method="post" asp-controller="Calculator" asp-action="Calculate">
+    @* Поле для ввода первого числа *@
+    <div class="form-group">
+        <label for="number1">Число 1:</label>
+        <input type="number" step="any" class="form-control" id="number1" name="number1" value="@ViewBag.Number1" required />
+    </div>
+    @* Поле для ввода второго числа *@
+    <div class="form-group">
+        <label for="number2">Число 2:</label>
+        <input type="number" step="any" class="form-control" id="number2" name="number2" value="@ViewBag.Number2" required />
+    </div>
+    @* Выпадающий список для выбора операции *@
+    <div class="form-group">
+        <label for="operation">Операция:</label>
+        <select class="form-control" id="operation" name="operation">
+            <option value="add" @(ViewBag.Operation == "add" ? "selected" : "")>Сложение</option>
+            <option value="subtract" @(ViewBag.Operation == "subtract" ? "selected" : "")>Вычитание</option>
+            <option value="multiply" @(ViewBag.Operation == "multiply" ? "selected" : "")>Умножение</option>
+            <option value="divide" @(ViewBag.Operation == "divide" ? "selected" : "")>Деление</option>
+        </select>
+    </div>
+    @* Кнопка для отправки формы *@
+    <button type="submit" class="btn btn-primary">Вычислить</button>
+</form>
+
+@* Отображаем результат, если он есть *@
+@if (ViewBag.Result != null)
+{
+    <div class="alert alert-success">Результат: @ViewBag.Result</div>
+}
