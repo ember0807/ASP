@@ -28,10 +28,11 @@
     <div class="form-group">
         <label for="operation">Операция:</label>
         <select class="form-control" id="operation" name="operation">
-            <option value="add" @(ViewBag.Operation == "add" ? "selected" : "")>Сложение</option>
-            <option value="subtract" @(ViewBag.Operation == "subtract" ? "selected" : "")>Вычитание</option>
-            <option value="multiply" @(ViewBag.Operation == "multiply" ? "selected" : "")>Умножение</option>
-            <option value="divide" @(ViewBag.Operation == "divide" ? "selected" : "")>Деление</option>
+            <option value="add" selected="@(ViewBag.Operation == "add" ? "selected" : null)">Сложение</option>
+            <option value="subtract" selected="@(ViewBag.Operation == "subtract" ? "selected" : null)">Вычитание</option>
+            <option value="multiply" selected="@(ViewBag.Operation == "multiply" ? "selected" : null)">Умножение</option>
+            <option value="divide" selected="@(ViewBag.Operation == "divide" ? "selected" : null)">Деление</option>
+
         </select>
     </div>
     @* Кнопка для отправки формы *@

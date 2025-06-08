@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstMvcApp", "MyFirstMvc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalculator", "SimpleCalculator\SimpleCalculator.csproj", "{2FF0D9BE-9098-470C-B031-B22D2030E075}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewApp", "ReviewApp\ReviewApp.csproj", "{4037AF78-A40C-463E-A82E-876EE7F5DB47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{2FF0D9BE-9098-470C-B031-B22D2030E075}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FF0D9BE-9098-470C-B031-B22D2030E075}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FF0D9BE-9098-470C-B031-B22D2030E075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4037AF78-A40C-463E-A82E-876EE7F5DB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4037AF78-A40C-463E-A82E-876EE7F5DB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4037AF78-A40C-463E-A82E-876EE7F5DB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4037AF78-A40C-463E-A82E-876EE7F5DB47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
