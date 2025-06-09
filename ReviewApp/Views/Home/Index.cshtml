@@ -6,39 +6,156 @@
     ViewData["Title"] = "Отзывы";
 }
 
-<h1>Отзывы пользователей</h1>
+<style>
+    /* Общие стили */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
 
-<div>
-    <h2>Оставьте свой отзыв</h2>
-    @using (Html.BeginForm("AddReview", "Home", FormMethod.Post))
+    .container {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    h1 {
+        color: #007bff;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        color: #212529;
+        margin-bottom: 1rem;
+        text-align: center; /* Центрируем заголовок формы */
+    }
+
+    hr {
+        border-top: 1px solid #dee2e6;
+        margin: 2rem 0;
+    }
+
+    p {
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    /* Стили для формы отзыва (Центрирование) */
+    .form-container {
+        max-width: 600px; /* Ограничиваем ширину формы */
+        margin: 0 auto; /* Автоматические отступы слева и справа для центрирования */
+        padding: 1.5rem;
+        border: 1px solid #dee2e6; /* Добавим рамку для визуального отделения */
+        border-radius: 0.5rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        display: block; /* Отображаем как блочный элемент для выравнивания */
+        width: 100%; /* Занимает всю доступную ширину */
+    }
+
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.75rem;
+        width: 100%; /* Занимает всю доступную ширину */
+        box-sizing: border-box; /* Учитываем border и padding в общей ширине */
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.25rem;
+        display: block; /* Чтобы кнопка занимала всю ширину контейнера */
+        margin: 0 auto; /* Центрируем кнопку, если нужно */
+        width: fit-content; /* Кнопка занимает столько места, сколько нужно для контента */
+    }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+    /* Стили для отзывов */
+    .review-item {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .review-author {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .review-rating {
+        color: #ffc107;
+    }
+
+    .review-text {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center">Отзывы пользователей</h1>
+
+    <div class="form-container">
+        <!-- Оборачиваем форму в новый div -->
+        <h2 class="text-center">Оставьте свой отзыв</h2>
+        @using (Html.BeginForm("AddReview", "Home", FormMethod.Post))
+        {
+            <div class="mb-3">
+                @Html.LabelFor(m => new Review().AuthorName, "Ваше имя:", new { @class = "form-label" })
+                @Html.TextBoxFor(m => new Review().AuthorName, new { @class = "form-control", required = "required" })
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(m => new Review().ReviewText, "Текст отзыва:", new { @class = "form-label" })
+                @Html.TextAreaFor(m => new Review().ReviewText, new { @class = "form-control", rows = 5, required = "required" })
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(m => new Review().Rating, "Оценка (1-5):", new { @class = "form-label" })
+                @Html.TextBoxFor(m => new Review().Rating, new { type = "number", min = "1", max = "5", required = "required", @class = "form-control" })
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+        }
+    </div>
+
+    <hr />
+
+    <h2>Последние отзывы</h2>
+    @if (Model != null && Model.Any())
     {
-        <div>
-            @Html.LabelFor(m => new Review().AuthorName, "Ваше имя:")
-            @Html.TextBoxFor(m => new Review().AuthorName, new { required = "required" })
-        </div>
-        <div>
-            @Html.LabelFor(m => new Review().ReviewText, "Текст отзыва:")
-            @Html.TextAreaFor(m => new Review().ReviewText, new { rows = 5, required = "required" })
-        </div>
-        <div>
-            @Html.LabelFor(m => new Review().Rating, "Оценка (1-5):")
-            @Html.TextBoxFor(m => new Review().Rating, new { type = "number", min = "1", max = "5", required = "required" })
-        </div>
-        <button type="submit">Отправить отзыв</button>
+        foreach (var review in Model)
+        {
+            <div class="review-item">
+                <div class="review-author">@review.AuthorName</div>
+                <div class="review-rating">Рейтинг: @review.Rating</div>
+                <div class="review-text">@review.ReviewText</div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Пока нет отзывов. Будьте первым!</p>
     }
 </div>
-
-<hr />
-
-<h2>Последние отзывы</h2>
-@if (Model != null && Model.Any())
-{
-    foreach (var review in Model)
-    {
-        @Html.ReviewDisplay(review) @* HTML-хелпер *@
-    }
-}
-else
-{
-    <p>Пока нет отзывов. Будьте первым!</p>
-}
