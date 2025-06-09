@@ -1,37 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReviewApp.Services;
 using ReviewApp.Models;
+using ReviewApp.Services;
 
 namespace ReviewApp.Controllers
 {
+    [Route("[controller]")] // Базовый маршрут для контроллера, например, /Home
     public class HomeController : Controller
     {
-        private readonly IReviewService _reviewService;
+        private readonly ReviewService _reviewService;
 
-        public HomeController(IReviewService reviewService)
+        public HomeController(ReviewService reviewService)
         {
             _reviewService = reviewService;
         }
 
+        [HttpGet("Index")] // Обрабатывает GET для /Home/Index
+        [HttpGet("/")] // Также обрабатывает корневой URL для приложения
         public IActionResult Index()
         {
-            var reviews = _reviewService.GetLatestReviews(20); // Получаем последние 20 отзывов
-            ViewBag.Reviews = reviews; // Передаем отзывы в представление
-            return View();
+            var latestReviews = _reviewService.GetLatestReviews();
+            return View(latestReviews);
         }
 
-        [HttpPost]
-        public IActionResult Create(Review review)
+        [HttpPost("AddReview")] // Обрабатывает POST для /Home/AddReview
+        public IActionResult AddReview(Review newReview)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(newReview.AuthorName) ||
+                string.IsNullOrWhiteSpace(newReview.ReviewText) ||
+                newReview.Rating < 1 || newReview.Rating > 5)
             {
-                //если данные из формы валидны
-                _reviewService.AddReview(review);
-                return RedirectToAction("Index"); 
+                return BadRequest("Пожалуйста, предоставьте всю необходимую информацию: Имя автора, Текст отзыва и Оценку от 1 до 5.");
             }
-            
-            return View(review); // Вернуть представление с ошибками валидации
-        }
 
+            _reviewService.AddReview(newReview);
+            return RedirectToAction("Index");
+        }
     }
 }

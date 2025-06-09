@@ -1,45 +1,44 @@
 ﻿@using ReviewApp.Models
+@using ReviewApp.Helpers
+@model IEnumerable<Review>
+
 @{
-    ViewData["Title"] = "Home Page";
-    List<Review> reviews = ViewBag.Reviews;
+    ViewData["Title"] = "Отзывы";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Добро пожаловать!</h1>
-    <p>Последние отзывы:</p>
+<h1>Отзывы пользователей</h1>
 
-    @if (reviews != null && reviews.Any())
+<div>
+    <h2>Оставьте свой отзыв</h2>
+    @using (Html.BeginForm("AddReview", "Home", FormMethod.Post))
     {
-        <ul>
-            @foreach (var review in reviews)
-            {
-                <li>
-                    <strong>@review.Author</strong> (Оценка: @review.Rating) - @review.DateCreated.ToShortDateString()<br />
-                    @review.Text
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p>Отзывов пока нет.</p>
+        <div>
+            @Html.LabelFor(m => new Review().AuthorName, "Ваше имя:")
+            @Html.TextBoxFor(m => new Review().AuthorName, new { required = "required" })
+        </div>
+        <div>
+            @Html.LabelFor(m => new Review().ReviewText, "Текст отзыва:")
+            @Html.TextAreaFor(m => new Review().ReviewText, new { rows = 5, required = "required" })
+        </div>
+        <div>
+            @Html.LabelFor(m => new Review().Rating, "Оценка (1-5):")
+            @Html.TextBoxFor(m => new Review().Rating, new { type = "number", min = "1", max = "5", required = "required" })
+        </div>
+        <button type="submit">Отправить отзыв</button>
     }
 </div>
 
-<h2>Оставить отзыв</h2>
+<hr />
 
-<form asp-action="AddReview" method="post">
-    <div class="form-group">
-        <label for="Author">Ваше имя:</label>
-        <input type="text" class="form-control" id="Author" name="Author" required>
-    </div>
-    <div class="form-group">
-        <label for="Text">Ваш отзыв:</label>
-        <textarea class="form-control" id="Text" name="Text" rows="3" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="Rating">Оценка (1-5):</label>
-        <input type="number" class="form-control" id="Rating" name="Rating" min="1" max="5" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Отправить</button>
-</form>
+<h2>Последние отзывы</h2>
+@if (Model != null && Model.Any())
+{
+    foreach (var review in Model)
+    {
+        @Html.ReviewDisplay(review) @* HTML-хелпер *@
+    }
+}
+else
+{
+    <p>Пока нет отзывов. Будьте первым!</p>
+}

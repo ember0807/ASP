@@ -1,0 +1,45 @@
+﻿@using ReviewApp.Models
+@{
+    ViewData["Title"] = "Home Page";
+    List<Review> reviews = ViewBag.Reviews;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать!</h1>
+    <p>Последние отзывы:</p>
+
+    @if (reviews != null && reviews.Any())
+    {
+        <ul>
+            @foreach (var review in reviews)
+            {
+                <li>
+                    <strong>@review.Author</strong> (Оценка: @review.Rating) - @review.DateCreated.ToShortDateString()<br />
+                    @review.Text
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Отзывов пока нет.</p>
+    }
+</div>
+
+<h2>Оставить отзыв</h2>
+
+<form asp-action="AddReview" method="post">
+    <div class="form-group">
+        <label for="Author">Ваше имя:</label>
+        <input type="text" class="form-control" id="Author" name="Author" required>
+    </div>
+    <div class="form-group">
+        <label for="Text">Ваш отзыв:</label>
+        <textarea class="form-control" id="Text" name="Text" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Rating">Оценка (1-5):</label>
+        <input type="number" class="form-control" id="Rating" name="Rating" min="1" max="5" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
